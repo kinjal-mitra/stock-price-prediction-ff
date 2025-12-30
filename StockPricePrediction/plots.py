@@ -1,29 +1,34 @@
+# StockPricePrediction/plots.py
+
+import matplotlib.pyplot as plt
 from pathlib import Path
 
-from loguru import logger
-from tqdm import tqdm
-import typer
-
-from StockPricePrediction.config import FIGURES_DIR, PROCESSED_DATA_DIR
-
-app = typer.Typer()
+from config import FIGURES_DIR
 
 
-@app.command()
-def main(
-    # ---- REPLACE DEFAULT PATHS AS APPROPRIATE ----
-    input_path: Path = PROCESSED_DATA_DIR / "dataset.csv",
-    output_path: Path = FIGURES_DIR / "plot.png",
-    # -----------------------------------------
+def plot_price_predictions(
+    actual_prices,
+    lstm_price_preds,
+    gru_price_preds,
+    filename="lstm_gru_price_predictions.png"
 ):
-    # ---- REPLACE THIS WITH YOUR OWN CODE ----
-    logger.info("Generating plot from data...")
-    for i in tqdm(range(10), total=10):
-        if i == 5:
-            logger.info("Something happened for iteration 5.")
-    logger.success("Plot generation complete.")
-    # -----------------------------------------
+    """
+    Plot actual vs LSTM vs GRU predicted prices
+    and save the figure to reports/figures/.
+    """
 
+    FIGURES_DIR.mkdir(exist_ok=True)
 
-if __name__ == "__main__":
-    app()
+    plt.figure(figsize=(12, 5))
+    plt.plot(actual_prices, label="Actual Price", linewidth=2)
+    plt.plot(lstm_price_preds, label="LSTM Predicted", alpha=0.7)
+    plt.plot(gru_price_preds, label="GRU Predicted", alpha=0.7)
+    plt.legend()
+    plt.title("Next-Day Stock Price Prediction via Log Returns")
+    plt.tight_layout()
+
+    output_path = FIGURES_DIR / filename
+    plt.savefig(output_path)
+    plt.close()
+
+    print(f"Price prediction plot saved to: {output_path}")

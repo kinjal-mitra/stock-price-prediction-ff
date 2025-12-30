@@ -1,0 +1,11 @@
+
+        LSTM – Log Return Metrics
+        MAE  : 158.645781
+        RMSE : 177.578223
+        R²   : 0.9191
+
+        GRU – Log Return Metrics
+        MAE  : 289.018680
+        RMSE : 323.914574
+        R²   : 0.7309
+        

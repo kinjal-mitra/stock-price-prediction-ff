@@ -1,22 +1,21 @@
-# run_pipeline.py
-
-from dataset import load_and_merge_raw_data
+from dataset import load_raw_data
 from features import create_features
-from data_processing import save_processed_data
-from modeling.train import train_xgboost
+from modeling.train import train_and_evaluate
+from plots import plot_price_predictions
+
 
 def main():
-    # Load + merge raw data
-    df = load_and_merge_raw_data()
-
-    # Feature engineering
+    df = load_raw_data()
     df = create_features(df)
 
-    # Save processed dataset
-    save_processed_data(df)
+    actual_prices, lstm_preds, gru_preds = train_and_evaluate(df)
 
-    # Train model
-    train_xgboost(df)
+    plot_price_predictions(
+        actual_prices,
+        lstm_preds,
+        gru_preds
+    )
+
 
 if __name__ == "__main__":
     main()
